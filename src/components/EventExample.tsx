@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useRef, useState} from 'react';
 
 const EventExample: FC = () => {
 
@@ -7,11 +7,13 @@ const EventExample: FC = () => {
     }
 
     const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-        console.log(value)
+        console.log(inputRef.current?.value)
+        //inputRef.current?.value - ts подчеркивает красным, потому что value может быть null -> ставим - ?.
     }
 
     const [value,setValue] = useState<string>('')
     const [isDrag, setIsDrag] = useState<boolean>(false)
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const dragHandler = (e: React.DragEvent<HTMLDivElement>) => {
         console.log('drag')
@@ -32,7 +34,8 @@ const EventExample: FC = () => {
     }
     return (
         <div>
-            <input value={value} onChange={changeHandler} type='text'/>
+            <input value={value} onChange={changeHandler} type='text' placeholder='управляемый'/>
+            <input ref={inputRef} type='text' placeholder='неуправляемый'/>
             <button onClick={clickHandler}>kkkkll</button>
             <div onDrag={dragHandler} draggable style={{width:200, height:200, background:'red'}}></div>
             <div onDrop={dropHandler}
